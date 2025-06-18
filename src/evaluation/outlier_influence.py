@@ -66,7 +66,8 @@ kpca_outliers = np.argsort(kpca_scores)[-k:]
 model = LogisticRegression(max_iter=MAX_ITER).fit(X_train, y_train)
 influencer = LogisticInfluence(model, X_train, y_train)
 avg_inf = influencer.average_influence(X_test, y_test)
-neg_influencers = np.argsort(avg_inf)[:k]
+neg_influencers = np.argsort(avg_inf)[-k:]
+
 
 # Get k random points
 rng = np.random.RandomState(912)
@@ -140,7 +141,7 @@ results = {'influence': [], 'knn': [], 'random': []}
 
 for frac in steps:
     k = max(1, int(frac * n_train))
-    idx_inf = np.argsort(avg_inf)[:k]
+    idx_inf = np.argsort(avg_inf)[-k:]
     idx_knn = np.argsort(KNN().fit(X_train).decision_scores_)[-k:]
     idx_rnd = rng.choice(n_train, size=k, replace=False)
 
@@ -152,7 +153,7 @@ plt.figure(figsize=(8, 5))
 plt.plot(steps, results['influence'], marker='o', label='Influence')
 plt.plot(steps, results['knn'], marker='s', label='KNN')
 plt.plot(steps, results['random'], marker='^', label='Random')
-plt.xlabel('k')
+plt.xlabel('Removal fraction k')
 plt.ylabel('Test Log Loss')
 plt.title('Effect of Removing k Points on Test Log Loss')
 plt.legend()
