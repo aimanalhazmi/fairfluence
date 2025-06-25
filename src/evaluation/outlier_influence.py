@@ -14,6 +14,7 @@ SRC = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, SRC)
 
 from influence.logistic_influence import LogisticInfluence
+from ingestion.ingestion import IngestorFactory
 
 from pyod.models.knn import KNN
 from pyod.models.kpca import KPCA
@@ -23,6 +24,10 @@ N_SAMPLE = 1000 # Data points in the mock dataset
 MISLABELING = 0.02 # Mislabeled data, theoretically highly negative inflkuence
 MAX_ITER = 100 # Model iterations
 
+link = "https://huggingface.co/datasets/scikit-learn/adult-census-income"
+ingestor_factory = IngestorFactory(link, 0)
+ingestor = ingestor_factory.create()
+dataframe = ingestor.load_data()
 
 # Mock dataset with 2 classes, 2% of mislabeled data
 X, y = make_classification(

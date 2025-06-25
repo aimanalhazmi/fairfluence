@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from .base import InfluenceFunctionBase
 
 
@@ -36,3 +37,15 @@ class LogisticInfluence(InfluenceFunctionBase):
             influence_i = self.get_influence(X_test[i], y_test[i])
             total_influence += influence_i
         return total_influence / len(X_test)
+
+    def append_influence_column(self, X_test, y_test, strategy='avg'):
+        """Returns a new DataFrame with an additional 'influence' column."""
+        if strategy == 'avg':
+            influences = self.average_influence(X_test, y_test)
+        else:
+            raise ValueError("Unknown strategy")
+
+        X_train_df = pd.DataFrame(self.X_train)
+        print(X_train_df.shape)
+        X_train_df['influence'] = influences
+        return influences
