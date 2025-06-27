@@ -5,7 +5,6 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 
 from src.profiling.empty_detection import empty_detection
-from src.profiling.outlier_detection import OutlierDetector
 from src.profiling.influence_detection import InfluenceOutlierDetector
 
 # === 1. 读取数据 ===
@@ -38,11 +37,6 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, 
 print("\n==== Missing Value Detection ====")
 mv_report = empty_detection().report(df)
 print(mv_report)
-
-# === 4. Outlier 检测 ===
-print("\n==== Outlier Detection (Z-score) ====")
-outlier_idx = OutlierDetector(method='zscore', threshold=40).detect(X_train)
-print("Outlier indices:", np.unique(outlier_idx[0]))
 
 # === 5. influence Function 检测 ===
 print("\n==== influence Function Detection ====")
